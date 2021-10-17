@@ -83,6 +83,50 @@ private:
 	void reset_data_pin(uint8_t pin){
 		*Data_PORT &= ~(1<<pin);
 	}
+
+	void double_to_str(double number, char *buffer, bool *after_point){
+		/* used in float conversion. */
+		double _10_pow[5] = {10.0, 100.0, 1000.0, 10000.0, 100000.0};
+		double float_part = 0;
+		double result = 0;
+
+		/* check if float number is 0*/
+		if(number == 0){
+			*after_point = 0;
+			return;
+		}
+		if(number < 0){
+			number *= -1;
+		}
+
+		/* loop to extract float part and convert it to integer. */
+		int i = 0;
+		char temp_buffer[5] = "\0";
+		while(i<5){
+			float_part = number * _10_pow[i];
+			result = float_part - (long)float_part;
+			if( ((int)(float_part)) == 0){
+				buffer[i] = '0';
+			}
+			if(result == 0){
+				break;
+			}
+			i++;
+		}
+
+		/* convert float part into string. */
+		ltoa((long)float_part, temp_buffer, 10);
+		strcat(buffer, temp_buffer);
+
+		/* after point !=0 */
+		*after_point = 1;
+
+		return;
+	}
+
+	 void int_to_str(long number, char *buffer){
+		ltoa(number, buffer, 10);
+	}
 };
 
 

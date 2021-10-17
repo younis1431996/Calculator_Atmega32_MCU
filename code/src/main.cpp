@@ -36,9 +36,8 @@ int main(void){
 	/* init screen */
 	lcd.return_home();
 	lcd.print_string_to("calculator; OP[ , ]",0,0);
-	lcd.print_character_to('*', 0, 15);
-	lcd.print_character_to('+', 0, 17);
 	lcd.move_cursor_to(1, 0);
+	lcd.print_number(1.2365);
 
 	uint8_t key = '\0';
 

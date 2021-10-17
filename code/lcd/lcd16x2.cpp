@@ -230,7 +230,51 @@ void lcd :: move_cursor_to(uint8_t x, uint8_t y){
 
 /* print number */
 void lcd :: print_number(double number){
+	/* int part string. */
+	char __int_part_buffer[7];
 
+	/* float part string. */
+	char __float_part_buffer[9];
+
+	/* total number buffer. */
+	char total_number_buffer[17];
+
+	/* if number is integer. */
+	if( (number-(long)number) == 0){
+		int_to_str(number, __int_part_buffer);
+		lcd :: print_string(__int_part_buffer);
+		return;
+	} // _END_IF_
+	else{
+		bool after_point = false;
+		/* Extract float part. */
+		double float_part = number - (long)(number);
+
+		/* temp string. */
+		char temp_buffer[9];
+
+		/* convert float number */
+		double_to_str(float_part, temp_buffer, &after_point);
+
+		if(after_point == 0){
+			/* convert int number. */
+			int_to_str(number, __int_part_buffer);
+			lcd :: print_string(__int_part_buffer);
+			return;
+		} // _END_IF_
+		else{
+			/* add dot {.} */
+			__float_part_buffer[0] = '.';
+			strcat(__float_part_buffer, temp_buffer);
+
+			/* convert int number. */
+			int_to_str(number, __int_part_buffer);
+			strcat(total_number_buffer, __int_part_buffer);
+
+			strcat(total_number_buffer, __float_part_buffer);
+			lcd :: print_string(total_number_buffer);
+		} // _END_ELSE_
+	} // _END_ELSE_
 }
 
 /* print number to x, y position*/
